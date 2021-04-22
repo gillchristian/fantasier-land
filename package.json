@@ -1,0 +1,19 @@
+{
+  "name": "fantasier-land",
+  "version": "0.0.1",
+  "description": "fantasy-land in fp-ts exercises",
+  "main": "index.js",
+  "repository": "git@github.com:gillchristian/fantasier-land.git",
+  "author": "gillchristian <gillchristiang@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "fp-ts": "^2.10.4",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "fmt": "prettier --write '**/*.{md,json,ts}'"
+  }
+}
