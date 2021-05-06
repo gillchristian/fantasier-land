@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "fast-check": "^2.14.0",
     "fp-ts": "^2.10.4",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
