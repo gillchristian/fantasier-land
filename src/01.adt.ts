@@ -5,13 +5,13 @@
 
 import {pipe} from 'fp-ts/function'
 
-type Coord = {
+export type Coord = {
   x: number
   y: number
   z: number
 }
 
-const Coord = (x: number) => (y: number) => (z: number): Coord => ({x, y, z})
+export const Coord = (x: number) => (y: number) => (z: number): Coord => ({x, y, z})
 
 const translateCoord = (x: number) => (y: number) => (z: number) => (coord: Coord): Coord => ({
   x: x + coord.x,
@@ -19,12 +19,12 @@ const translateCoord = (x: number) => (y: number) => (z: number) => (coord: Coor
   z: z + coord.z,
 })
 
-type Line = {
+export type Line = {
   from: Coord
   to: Coord
 }
 
-const Line = (from: Coord) => (to: Coord): Line => ({from, to})
+export const Line = (from: Coord) => (to: Coord): Line => ({from, to})
 
 const origin = Coord(0)(0)(0)
 
@@ -32,7 +32,11 @@ const dest = pipe(origin, translateCoord(1)(2)(3))
 
 const line = Line(origin)(dest)
 
-console.log(line)
+const logLine = () => {
+  console.log(line)
+}
+
+// logLine()
 
 // Sum types
 
@@ -67,17 +71,29 @@ const translateShape = (x: number) => (y: number) => (z: number) => (shape: Shap
   })(shape)
 }
 
-console.log(translateShape(3)(3)(3)(Square(Coord(2)(2)(0))(Coord(3)(3)(0))))
+const logShape = () => {
+  console.log(translateShape(3)(3)(3)(Square(Coord(2)(2)(0))(Coord(3)(3)(0))))
 
-console.log(translateShape(1)(2)(3)(Circle(Coord(2)(2)(0))(5)))
+  console.log(translateShape(1)(2)(3)(Circle(Coord(2)(2)(0))(5)))
+}
 
-type List<A> = {tag: 'Cons'; head: A; tail: List<A>} | {tag: 'Nil'}
+// logShape()
 
-const Cons = <A>(head: A) => (tail: List<A>): List<A> => ({tag: 'Cons', head, tail})
+export type List<A> = {tag: 'Cons'; head: A; tail: List<A>} | {tag: 'Nil'}
 
-const Nil = <A>(): List<A> => ({tag: 'Nil'})
+// Cons a (List a)
+// Nil
+//
+// Cons 1 (Cons 2 (Cons 3 Nil))
+// [1, 2, 3]
 
-const matchList = <A = unknown, R = unknown>(matchers: {Cons: (head: A, tail: List<A>) => R; Nil: () => R}) => (
+export const Cons = <A>(head: A) => (tail: List<A>): List<A> => ({tag: 'Cons', head, tail})
+
+export const Nil = <A>(): List<A> => ({tag: 'Nil'})
+
+export const isNil = <A>(xs: List<A>) => xs.tag === 'Nil'
+
+export const matchList = <A = unknown, R = unknown>(matchers: {Cons: (head: A, tail: List<A>) => R; Nil: () => R}) => (
   list: List<A>,
 ): R => {
   if (list.tag === 'Cons') {
@@ -93,7 +109,7 @@ const map = <A, B>(f: (a: A) => B) => (list: List<A>): List<B> =>
     Nil,
   })(list)
 
-const fromArray = <A>(as: A[]): List<A> => as.reduceRight((tail, head) => Cons(head)(tail), Nil<A>())
+export const fromArray = <A>(as: A[]): List<A> => as.reduceRight((tail, head) => Cons(head)(tail), Nil<A>())
 
 const toArrray = <A>(as: List<A>): A[] =>
   matchList<A, A[]>({
@@ -103,12 +119,16 @@ const toArrray = <A>(as: List<A>): A[] =>
 
 const ns = fromArray([1, 2, 3]) // == Cons(1)(Cons(2)(Cons(3)(Nil())))
 
-console.dir(
-  pipe(
-    ns,
-    map(n => n.toString()),
-  ),
-  {depth: 5},
-)
+const logList = () => {
+  console.dir(
+    pipe(
+      ns,
+      map(n => n.toString()),
+    ),
+    {depth: 5},
+  )
 
-console.log(toArrray(fromArray([1, 2, 3, 4, 5, 6, 7])))
+  console.log(toArrray(fromArray([1, 2, 3, 4, 5, 6, 7])))
+}
+
+logList()

@@ -6,7 +6,6 @@
 export type add = (x: number) => (y: number) => number
 
 // zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
-
 const zipWith = <A, B, C>(f: (a: A) => (b: B) => C) => (xs: A[]) => (ys: B[]): C[] => {
   const length = Math.min(xs.length, ys.length)
 
